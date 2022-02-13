@@ -11,7 +11,7 @@ interface UserModel extends mongoose.Model<UserDoc> {
   build(attrs: UserAttrs): UserDoc;
 }
 
-interface UserDoc extends mongoose.Document {
+interface UserDoc {
   username: string;
   email: string;
   password: string;
