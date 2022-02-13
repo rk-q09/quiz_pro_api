@@ -1,10 +1,13 @@
 import jsonwebtoken from 'jsonwebtoken';
+import mongoose from 'mongoose';
 import path from 'path';
 import fs from 'fs';
-import { UserDoc } from '@models/user';
+import { UserAttr } from '@models/user';
 
 const pathToKey = path.join(__dirname, '../keys', 'id_rsa_priv.pem');
 const PRIV_KEY = fs.readFileSync(pathToKey, 'utf8');
+
+interface UserDoc extends mongoose.Document, UserAttr {}
 
 export const issueJWT = (user: UserDoc) => {
   const id = user.id;

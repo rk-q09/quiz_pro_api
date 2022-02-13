@@ -7,7 +7,7 @@ describe('save', () => {
     const password = faker.internet.password();
     const username = faker.internet.userName();
 
-    const user = User.build({ username, email, password });
+    const user = new User({ username, email, password });
     await user.save();
 
     const fetched = await User.findOne({ email });
