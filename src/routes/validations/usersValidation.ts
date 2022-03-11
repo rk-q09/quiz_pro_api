@@ -21,4 +21,19 @@ const signUpSchema: Schema = {
   },
 };
 
-export { signUpSchema };
+const signInSchema: Schema = {
+  email: {
+    isEmail: {
+      bail: true,
+    },
+    normalizeEmail: true,
+  },
+  password: {
+    isLength: {
+      errorMessage: '4~15文字以内で入力して下さい',
+      options: { min: 8, max: 15 },
+    },
+  },
+};
+
+export { signUpSchema, signInSchema };

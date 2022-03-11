@@ -1,6 +1,7 @@
 import { User, UserAttr } from '@models/user';
 import { issueJWT } from '@utils/issueJwt';
 import { BadRequestError } from '@errors/bad-request-error';
+import { Password } from '@utils/password';
 
 export class UserService {
   async signUp({ username, email, password }: UserAttr) {
@@ -19,6 +20,27 @@ export class UserService {
     const { token, expires } = issueJWT(user);
 
     return { user, token, expires };
+  }
+
+  async signIn({ email, password }: Omit<UserAttr, 'username'>) {
+    const existingUser = await User.findOne({ email });
+
+    if (!existingUser) {
+      throw new BadRequestError('登録されていないメールアドレスです');
+    }
+
+    const passwordsMatch = await Password.compare(
+      existingUser.password,
+      password
+    );
+
+    if (!passwordsMatch) {
+      throw new BadRequestError('パスワードが間違っています');
+    }
+
+    const { token, expires } = issueJWT(existingUser);
+
+    return { user: existingUser, token, expires };
   }
 }
 
