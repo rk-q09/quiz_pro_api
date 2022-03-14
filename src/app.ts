@@ -1,5 +1,6 @@
 import express from 'express';
 import 'express-async-errors';
+import passport from '@config/passport';
 
 import { router } from '@routes';
 import { NotFoundError } from '@errors/not-found-error';
@@ -13,6 +14,7 @@ const app = express();
 app.use(express.json());
 app.set('trust proxy', true);
 
+app.use(passport.initialize());
 /**
  * ----- Route -----
  */

@@ -9,6 +9,7 @@ module.exports = {
     "@services/(.*)": "<rootDir>/src/services/$1",
     "@errors/(.*)": "<rootDir>/src/errors/$1",
     "@middlewares/(.*)": "<rootDir>/src/middlewares/$1",
-    "@routes": "<rootDir>/src/routes"
+    "@routes": "<rootDir>/src/routes",
+    "@config": "<rootDir>/src/config"
   }
 };
