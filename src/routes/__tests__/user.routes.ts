@@ -2,6 +2,8 @@ import request from 'supertest';
 import { app } from '../../app';
 import { faker } from '@faker-js/faker';
 
+import { createDummy } from '@test/user';
+
 it('returns 201 on successful signup', async () => {
   await request(app)
     .post('/users/signup')
@@ -28,3 +30,14 @@ it('returns 400 with serialized error message', async () => {
     .send({ email, password, username })
     .expect('Content-Type', /json/);
 });
+
+describe('GET /auth/me', () => {
+  it('should return 200', async () => {
+    const dummy = await createDummy();
+
+    request(app)
+      .get('/users/auth/me')
+      .set('Authorization', `Bearer ${dummy.token}`)
+      .expect(200);
+  });
+})
