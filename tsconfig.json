@@ -14,7 +14,8 @@
       "@errors/*": ["./src/errors/*"],
       "@middlewares/*": ["./src/middlewares/*"],
       "@services/*": ["./src/services/*"],
-      "@config/*": ["./src/config/*"]
+      "@config/*": ["./src/config/*"],
+      "@test/*": ["./src/test/*"]
     }
   }
 }

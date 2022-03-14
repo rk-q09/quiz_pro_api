@@ -10,6 +10,7 @@ module.exports = {
     "@errors/(.*)": "<rootDir>/src/errors/$1",
     "@middlewares/(.*)": "<rootDir>/src/middlewares/$1",
     "@routes": "<rootDir>/src/routes",
-    "@config": "<rootDir>/src/config"
+    "@config/(.*)": "<rootDir>/src/config/$1",
+    "@test/(.*)": "<rootDir>/src/test/$1"
   }
 };
