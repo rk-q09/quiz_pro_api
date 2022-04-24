@@ -20,7 +20,7 @@ const options: StrategyOptions = {
 
 passport.use(
   new JwtStrategy(options, (payload: any, done: any) => {
-    User.findOne({ id: payload.sub })
+    User.findById(payload.sub)
       .then((user) => {
         if (user) {
           return done(null, user);
