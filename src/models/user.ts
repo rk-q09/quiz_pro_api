@@ -21,6 +21,12 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    postedQuizzes: [
+      {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'Quiz',
+      },
+    ],
   },
   {
     toJSON: {
@@ -31,6 +37,7 @@ const userSchema = new mongoose.Schema(
         delete ret.__v;
       },
     },
+    timestamps: true,
   }
 );
 
