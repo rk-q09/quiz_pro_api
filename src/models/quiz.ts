@@ -7,6 +7,8 @@ interface QuizAttr {
   createdAt: Date;
 }
 
+export type CreateQuizDTO = Omit<QuizAttr, 'questions' | 'createdAt'>;
+
 const quizSchema = new mongoose.Schema(
   {
     title: {
@@ -40,4 +42,4 @@ const quizSchema = new mongoose.Schema(
 
 const Quiz = mongoose.model<QuizAttr>('Quiz', quizSchema);
 
-export { Quiz };
+export { Quiz, QuizAttr };
