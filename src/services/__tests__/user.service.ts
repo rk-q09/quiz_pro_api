@@ -1,11 +1,9 @@
-import { faker } from '@faker-js/faker';
 import { userService } from '@services/user.service';
+import { dummy } from '@test/user';
 
 describe('signup', () => {
   it('should resolve with true', async () => {
-    const email = faker.internet.email();
-    const password = faker.internet.password();
-    const username = faker.internet.userName();
+    const { email, password, username } = dummy();
 
     const response = await userService.signUp({ username, email, password });
 

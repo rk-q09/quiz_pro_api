@@ -42,6 +42,21 @@ export class UserService {
 
     return { user: existingUser, token, expires };
   }
+
+  async getQuizzes(userId: string) {
+    User.findById(userId)
+      .populate({
+        path: 'postedQuizzes',
+      })
+      .exec((err, user: any) => {
+        if (err) {
+          return new BadRequestError('登録されていないユーザーです');
+        }
+        console.log('on user.service', user.postedQuizzes);
+        // return user.postedQuizzes
+        return { message: 'hi' };
+      });
+  }
 }
 
 export const userService = new UserService();
