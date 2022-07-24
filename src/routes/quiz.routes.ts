@@ -9,13 +9,23 @@ import { User } from '@models/user';
 import { Quiz } from '@models//quiz';
 import { BadRequestError } from '@errors/bad-request-error';
 
+import { ExRequest } from './types';
+
 const router = express.Router();
 
 router.get(
   '/',
-  (req: Request, res: Response) => {
-    Quiz.find({})
+  async (req: ExRequest, res: Response) => {
+    const title = req.query.title;
+    const condition = title ? { title: { $regex: new RegExp(title), $options: "i" } } : {};
+
+    const pageNumber = req.query.page ? parseInt(req.query.page) : 1;
+    const limit = req.query.limit ? parseInt(req.query.limit) : 16;
+
+    Quiz.find(condition)
       .sort({ createdAt: -1 })
+      .limit(limit)
+      .skip( (pageNumber - 1) * limit)
       .then(data => {
         res.status(200).send(data)
       })
@@ -37,35 +47,71 @@ router.post(
   }
 );
 
-router.delete(
-  '/:quizId',
-  passport.authenticate('jwt', { session: false }),
-  async (req: Request, res: Response) => {
-    const { quizId } = req.params;
-
-    Quiz.findByIdAndDelete(quizId, (err: Error, quiz: any) => {
-      if (err) {
-        res.json(err);
-      }
-      res.json(quiz);
+router.get(
+  '/count',
+  (req: Request, res: Response) => {
+    Quiz.find()
+      .then(data =>
+        res.json({ count: data.length })
+      )
+     .catch(err => {
+        res.send({ errors: err })
     });
   }
 );
 
-router.get('/users/:userId', async (req: Request, res: Response) => {
+router.get(
+  '/search/count', 
+  (req: ExRequest, res: Response) => {
+    const title = req.query.title;
+    const condition = title ? { title: { $regex: new RegExp(title), $options: "i" } } : {};
+
+    Quiz.find(condition)
+      .then(data => {
+        res.json({ count: data.length });
+      })
+      .catch(err => {
+        res.send({ errors: err });
+      });
+});
+
+router.get('/users/:userId', async (req: ExRequest, res: Response) => {
   const { userId } = req.params;
+  
+  const pageNumber = req.query.page ? parseInt(req.query.page) : 1;
+  const limit = req.query.limit ? parseInt(req.query.limit) : 16;
   /*
     const postedQuizzes = await userService.getQuizzes(userId);  
     console.log('on quiz.routes', postedQuizzes);
     res.status(200).send({postedQuizzes});
     */
   User.findById(userId)
-    .populate('postedQuizzes')
+    .populate({
+      path: 'postedQuizzes',
+      options: {
+        sort: { created: -1 },
+        limit: limit,
+        skip: (pageNumber - 1) * limit,
+      }
+    })
     .exec((err, user: any) => {
       if (err) {
         throw new BadRequestError('登録されていないユーザーです');
       }
       res.status(200).json(user.postedQuizzes);
+    });
+});
+
+router.get('/users/:userId/count', (req: Request, res: Response) => {
+  const { userId } = req.params;
+
+  User.findById(userId)
+    .populate('postedQuizzes')
+    .exec((err, user: any) => {
+      if (err) {
+        throw new BadRequestError('登録されていないユーザーです');
+      }
+      res.status(200).json({ count: user.postedQuizzes.length });
     });
 });
 
@@ -91,7 +137,23 @@ router.post(
 
     if (!updatedQuiz) throw new Error();
 
+    console.log(updatedQuiz);
     res.status(201).json(updatedQuiz);
+  }
+);
+
+router.delete(
+  '/:quizId',
+  passport.authenticate('jwt', { session: false }),
+  async (req: Request, res: Response) => {
+    const { quizId } = req.params;
+
+    Quiz.findByIdAndDelete(quizId, (err: Error, quiz: any) => {
+      if (err) {
+        res.json(err);
+      }
+      res.json(quiz);
+    });
   }
 );
   
