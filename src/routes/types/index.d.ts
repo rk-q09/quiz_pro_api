@@ -4,6 +4,6 @@ type queryKeys = 'title' | 'page' | 'limit';
 
 export interface ExRequest extends Request {
   query: {
-    [key in queryKeys]: string
-  }
+    [key in queryKeys]: string;
+  };
 }

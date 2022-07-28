@@ -13,27 +13,26 @@ import { ExRequest } from './types';
 
 const router = express.Router();
 
-router.get(
-  '/',
-  async (req: ExRequest, res: Response) => {
-    const title = req.query.title;
-    const condition = title ? { title: { $regex: new RegExp(title), $options: "i" } } : {};
+router.get('/', async (req: ExRequest, res: Response) => {
+  const title = req.query.title;
+  const condition = title
+    ? { title: { $regex: new RegExp(title), $options: 'i' } }
+    : {};
 
-    const pageNumber = req.query.page ? parseInt(req.query.page) : 1;
-    const limit = req.query.limit ? parseInt(req.query.limit) : 16;
+  const pageNumber = req.query.page ? parseInt(req.query.page) : 1;
+  const limit = req.query.limit ? parseInt(req.query.limit) : 16;
 
-    Quiz.find(condition)
-      .sort({ createdAt: -1 })
-      .limit(limit)
-      .skip( (pageNumber - 1) * limit)
-      .then(data => {
-        res.status(200).send(data)
-      })
-      .catch(err => {
-        res.send({ errors: err })
-      });
-  }
-);
+  Quiz.find(condition)
+    .sort({ createdAt: -1 })
+    .limit(limit)
+    .skip((pageNumber - 1) * limit)
+    .then((data) => {
+      res.status(200).send(data);
+    })
+    .catch((err) => {
+      res.send({ errors: err });
+    });
+});
 
 router.post(
   '/',
@@ -47,37 +46,32 @@ router.post(
   }
 );
 
-router.get(
-  '/count',
-  (req: Request, res: Response) => {
-    Quiz.find()
-      .then(data =>
-        res.json({ count: data.length })
-      )
-     .catch(err => {
-        res.send({ errors: err })
+router.get('/count', (req: Request, res: Response) => {
+  Quiz.find()
+    .then((data) => res.json({ count: data.length }))
+    .catch((err) => {
+      res.send({ errors: err });
     });
-  }
-);
+});
 
-router.get(
-  '/search/count', 
-  (req: ExRequest, res: Response) => {
-    const title = req.query.title;
-    const condition = title ? { title: { $regex: new RegExp(title), $options: "i" } } : {};
+router.get('/search/count', (req: ExRequest, res: Response) => {
+  const title = req.query.title;
+  const condition = title
+    ? { title: { $regex: new RegExp(title), $options: 'i' } }
+    : {};
 
-    Quiz.find(condition)
-      .then(data => {
-        res.json({ count: data.length });
-      })
-      .catch(err => {
-        res.send({ errors: err });
-      });
+  Quiz.find(condition)
+    .then((data) => {
+      res.json({ count: data.length });
+    })
+    .catch((err) => {
+      res.send({ errors: err });
+    });
 });
 
 router.get('/users/:userId', async (req: ExRequest, res: Response) => {
   const { userId } = req.params;
-  
+
   const pageNumber = req.query.page ? parseInt(req.query.page) : 1;
   const limit = req.query.limit ? parseInt(req.query.limit) : 16;
   /*
@@ -92,7 +86,7 @@ router.get('/users/:userId', async (req: ExRequest, res: Response) => {
         sort: { created: -1 },
         limit: limit,
         skip: (pageNumber - 1) * limit,
-      }
+      },
     })
     .exec((err, user: any) => {
       if (err) {
@@ -115,16 +109,13 @@ router.get('/users/:userId/count', (req: Request, res: Response) => {
     });
 });
 
-router.get(
-  '/:quizId',
-  async (req: Request, res: Response) => {
-    const quizId = req.params.quizId;
+router.get('/:quizId', async (req: Request, res: Response) => {
+  const quizId = req.params.quizId;
 
-    const quiz = await quizService.getQuiz({ quizId });
+  const quiz = await quizService.getQuiz({ quizId });
 
-    res.status(200).json(quiz);
-  }
-); 
+  res.status(200).json(quiz);
+});
 
 router.post(
   '/:quizId',
@@ -133,7 +124,12 @@ router.post(
     const quizId = req.params.quizId;
     const { content, choices, answer } = req.body;
 
-    const updatedQuiz = await quizService.addQuestion({ content, choices, answer, quizId });
+    const updatedQuiz = await quizService.addQuestion({
+      content,
+      choices,
+      answer,
+      quizId,
+    });
 
     if (!updatedQuiz) throw new Error();
 
@@ -156,6 +152,5 @@ router.delete(
     });
   }
 );
-  
 
 export { router as quizzesRouter };

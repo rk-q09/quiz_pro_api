@@ -20,7 +20,7 @@ const quizSchema = new mongoose.Schema(
         content: { type: String, required: true },
         choices: { type: Array, required: true },
         correctAnswer: { type: Number, required: true },
-        _id: false
+        _id: false,
       },
     ],
     createdBy: {

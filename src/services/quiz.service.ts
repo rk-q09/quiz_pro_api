@@ -7,7 +7,7 @@ type CreateQuestionDTO = {
   choices: string[];
   answer: number;
   quizId: string;
-}
+};
 
 export class QuizService {
   async getQuiz({ quizId }: { quizId: string }) {
@@ -19,8 +19,8 @@ export class QuizService {
 
     return {
       title: existingQuiz.title,
-      questions: existingQuiz.questions
-    }
+      questions: existingQuiz.questions,
+    };
   }
 
   async addQuiz({ title, createdBy: userId }: CreateQuizDTO) {
@@ -53,19 +53,25 @@ export class QuizService {
       throw new BadRequestError('クイズが存在しません');
     }
 
-    const updatedQuiz = await Quiz.findByIdAndUpdate(quizId, {
-      $push: { questions: {
-        content: content,
-        choices: choices,
-        correctAnswer: answer
-      }}
-    }, {
-      select: "questions",
-      new: true
-    });
-    
+    const updatedQuiz = await Quiz.findByIdAndUpdate(
+      quizId,
+      {
+        $push: {
+          questions: {
+            content: content,
+            choices: choices,
+            correctAnswer: answer,
+          },
+        },
+      },
+      {
+        select: 'questions',
+        new: true,
+      }
+    );
+
     return updatedQuiz;
-  } 
+  }
 }
 
 export const quizService = new QuizService();
