@@ -4,16 +4,16 @@ import { userService } from '@services/user.service';
 
 type DummyUserAndToken = { user: any; token: string };
 
-export function dummy() {
+export function userGenerator() {
   return {
     email: faker.internet.email(),
     password: faker.internet.password(),
-    username: faker.internet.userName(),
+    username: faker.word.noun(8),
   };
 }
 
-export async function createDummy(): Promise<DummyUserAndToken> {
-  const dummyUser = dummy();
+export async function createDummyUser(): Promise<DummyUserAndToken> {
+  const dummyUser = userGenerator();
   const { user, token } = await userService.signUp(dummyUser);
   return { user, token };
 }

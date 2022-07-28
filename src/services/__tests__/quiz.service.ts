@@ -1,9 +1,9 @@
 import { quizService } from '@services/quiz.service';
-import { createDummy } from '@test/user';
+import { createDummyUser } from '@test/data/user';
 
 describe('addQuiz', () => {
   it('should resolve with true', async () => {
-    const { user } = await createDummy();
+    const { user } = await createDummyUser();
 
     const title = 'test quiz';
 

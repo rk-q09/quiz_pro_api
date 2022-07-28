@@ -9,6 +9,7 @@ const signUpSchema: Schema = {
   },
   email: {
     isEmail: {
+      errorMessage: '正しいメールアドレスを入力して下さい',
       bail: true,
     },
     normalizeEmail: true,
@@ -24,6 +25,7 @@ const signUpSchema: Schema = {
 const signInSchema: Schema = {
   email: {
     isEmail: {
+      errorMessage: '正しいメールアドレスを入力して下さい',
       bail: true,
     },
     normalizeEmail: true,

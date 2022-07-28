@@ -1,9 +1,9 @@
 import { userService } from '@services/user.service';
-import { dummy } from '@test/user';
+import { userGenerator } from '@test/data/user';
 
 describe('signup', () => {
   it('should resolve with true', async () => {
-    const { email, password, username } = dummy();
+    const { email, password, username } = userGenerator();
 
     const response = await userService.signUp({ username, email, password });
 
