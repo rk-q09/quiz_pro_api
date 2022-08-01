@@ -83,7 +83,7 @@ router.get('/users/:userId', async (req: ExRequest, res: Response) => {
     .populate({
       path: 'postedQuizzes',
       options: {
-        sort: { created: -1 },
+        sort: { createdAt: -1 },
         limit: limit,
         skip: (pageNumber - 1) * limit,
       },
