@@ -22,10 +22,6 @@ app.use(passport.initialize());
  */
 app.use(router);
 
-router.get('/test', (req, res) => {
-  res.json({ message: 'TEST' });
-});
-
 app.all('*', async (req, res) => {
   throw new NotFoundError();
 });
