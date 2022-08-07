@@ -1,3 +1,4 @@
 node_modules
 src/config/config.env
-src/keys
+src/keys/id_rsa_pub.pem
+src/keys/id_rsa_priv.pem
