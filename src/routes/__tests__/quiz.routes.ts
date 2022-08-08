@@ -111,71 +111,42 @@ describe('DELETE /quizzes/:quizId', () => {
   });
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+describe('GET /quizzes/count', () => {
+  it('should return number of quizzes', async () => {
+    const { user, token } = await createDummyUser();
+    const { title } = quizGenerator();
+    
+    await request(app)
+      .post('/quizzes')
+      .send({
+        userId: user.id,
+        title
+      })
+      .set('authorization', token);
+
+    const res = await request(app)
+      .get('/quizzes/count');
+
+    expect(res.body.count).toEqual(1);
+  });
+});
+
+describe('GET /quizzes/search/count', () => {
+  it('should return number of matched quizzes', async () => {
+    const { user, token } = await createDummyUser();
+    const { title } = quizGenerator();
+    
+    await request(app)
+      .post('/quizzes')
+      .send({
+        userId: user.id,
+        title
+      })
+      .set('authorization', token);
+    
+    const res = await request(app)
+      .get(`/quizzes/search/count?search=${title}`);
+
+    expect(res.body.count).toEqual(1);
+  });
+});
