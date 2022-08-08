@@ -133,7 +133,6 @@ router.post(
 
     if (!updatedQuiz) throw new Error();
 
-    console.log(updatedQuiz);
     res.status(201).json(updatedQuiz);
   }
 );
